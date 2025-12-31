@@ -2,3 +2,6 @@ fastapi
 uvicorn[standard]
 pydantic
 email-validator
+
+google-api-python-client
+google-auth
