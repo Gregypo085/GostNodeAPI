@@ -20,6 +20,8 @@ api.add_middleware(
         "http://localhost:8000", # local testing
         "http://127.0.0.1:8000", # local testing
         "https://gregypo085.github.io", # GitHub Pages
+        "https://gostnode.com", # production
+        "https://www.gostnode.com", # production
     ],
     allow_methods=["POST", "OPTIONS"],
     allow_headers=["*"],
@@ -58,12 +60,14 @@ def signup(data: Signup):
 
     email = data.email.lower()
     created_at = datetime.utcnow().isoformat()
-
-    # 1 Save to Google Sheet
+    
+    # Write to Google Sheets
     try:
         append_email_to_sheet(email, created_at)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Google Sheets error: {e}")
+        # Log but don't block signup
+        print("Google Sheets error:", e)
+
 
     # 2 Keeping SQLite for now
     conn = sqlite3.connect(DB_PATH)
